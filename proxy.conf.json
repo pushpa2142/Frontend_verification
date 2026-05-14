@@ -1,0 +1,8 @@
+{
+  "/api": {
+    "target": "https://vz30wim4n7.execute-api.ap-south-1.amazonaws.com/prod",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  }
+}

@@ -1,0 +1,95 @@
+<div class="page-wrapper">
+  <div class="card fade-in-up">
+
+    <!-- Brand -->
+    <div class="brand">
+      <div class="brand-icon">🔐</div>
+      <div class="brand-name">Phone<span>Verify</span></div>
+    </div>
+
+    <!-- Heading -->
+    <h1 class="section-title">Enter your code</h1>
+    <p class="section-subtitle">
+      We sent a 6-digit code to <strong style="color:var(--text)">{{ maskedPhone }}</strong>.
+      Enter it below to verify your number.
+    </p>
+
+    <!-- Timer -->
+    <div style="margin-bottom: 20px;">
+      <span class="timer-badge" [ngClass]="timerClass">
+        <span>⏱</span>
+        <span *ngIf="!timerExpired">Expires in {{ formattedTime }}</span>
+        <span *ngIf="timerExpired">Code expired</span>
+      </span>
+    </div>
+
+    <!-- Error Alert -->
+    <div class="alert alert-error" *ngIf="errorMessage">
+      <span>⚠️</span>
+      <span>{{ errorMessage }}</span>
+    </div>
+
+    <!-- Success Alert -->
+    <div class="alert alert-success" *ngIf="successMessage">
+      <span>✅</span>
+      <span>{{ successMessage }}</span>
+    </div>
+
+    <!-- Form -->
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+
+      <div class="form-group otp-group">
+        <label for="otp">Verification Code</label>
+        <div class="input-wrap">
+          <input
+            id="otp"
+            type="text"
+            inputmode="numeric"
+            formControlName="otp"
+            placeholder="000000"
+            maxlength="6"
+            autocomplete="one-time-code"
+            [class.error]="otp.invalid && otp.touched"
+            (keypress)="onOtpKeypress($event)"
+          >
+        </div>
+        <div class="field-error" *ngIf="otp.invalid && otp.touched">
+          <span *ngIf="otp.errors?.['required']">Please enter the 6-digit code</span>
+          <span *ngIf="otp.errors?.['pattern'] || otp.errors?.['minlength'] || otp.errors?.['maxlength']">
+            The code must be exactly 6 digits
+          </span>
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="form.invalid || loading || timerExpired"
+        style="margin-bottom: 12px;"
+      >
+        <span class="spinner" *ngIf="loading"></span>
+        <span>{{ loading ? 'Verifying…' : 'Verify Code' }}</span>
+        <span *ngIf="!loading">✓</span>
+      </button>
+
+      <!-- Resend -->
+      <button
+        type="button"
+        class="btn btn-ghost"
+        (click)="resendCode()"
+        [disabled]="resending"
+      >
+        <span class="spinner" *ngIf="resending" style="border-color: rgba(255,255,255,0.2); border-top-color: var(--text-muted);"></span>
+        <span>{{ resending ? 'Sending…' : 'Resend Code' }}</span>
+      </button>
+
+    </form>
+
+    <!-- Back link -->
+    <div class="divider"></div>
+    <button class="btn btn-ghost" (click)="goBack()" style="color: var(--text-dim); border-color: transparent;">
+      ← Change phone number
+    </button>
+
+  </div>
+</div>

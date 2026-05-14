@@ -1,0 +1,92 @@
+<div class="page-wrapper">
+
+  <!-- Loading state -->
+  <div class="card fade-in-up" *ngIf="loading">
+    <div class="loading-state">
+      <div class="loading-spinner"></div>
+      <p>Loading your profile…</p>
+    </div>
+  </div>
+
+  <!-- Error state -->
+  <div class="card fade-in-up" *ngIf="!loading && errorMessage">
+    <div class="alert alert-error">
+      <span>⚠️</span>
+      <span>{{ errorMessage }}</span>
+    </div>
+    <button class="btn btn-ghost" (click)="loadProfile()">Try again</button>
+  </div>
+
+  <!-- Dashboard -->
+  <div class="card fade-in-up dashboard-card" *ngIf="!loading && user">
+
+    <!-- Header row -->
+    <div class="dash-header">
+      <div class="brand">
+        <div class="brand-icon">✅</div>
+        <div class="brand-name">Phone<span>Verify</span></div>
+      </div>
+      <button class="btn btn-ghost logout-btn" (click)="logout()">
+        Sign out →
+      </button>
+    </div>
+
+    <!-- Hero section -->
+    <div class="hero-section">
+      <div class="avatar">
+        <span>{{ user.phoneNumber?.charAt(0) }}</span>
+      </div>
+      <div>
+        <h1 class="section-title" style="margin-bottom: 8px;">
+          {{ user.name || 'Welcome back' }}
+        </h1>
+        <div class="status-badge verified" *ngIf="user.isPhoneVerified">
+          <div class="dot"></div>
+          Verified
+        </div>
+        <div class="status-badge unverified" *ngIf="!user.isPhoneVerified">
+          <div class="dot"></div>
+          Unverified
+        </div>
+      </div>
+    </div>
+
+    <!-- Info Grid -->
+    <div class="info-grid">
+
+      <div class="info-card">
+        <div class="info-label">Phone Number</div>
+        <div class="info-value phone-value">{{ maskedPhone }}</div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-label">Verification Status</div>
+        <div class="info-value success-value" *ngIf="user.isPhoneVerified">✅ Verified</div>
+        <div class="info-value warn-value" *ngIf="!user.isPhoneVerified">⏳ Pending</div>
+      </div>
+
+      <div class="info-card" *ngIf="user.isPhoneVerified && verifiedDate">
+        <div class="info-label">Verified On</div>
+        <div class="info-value">{{ verifiedDate }}</div>
+      </div>
+
+      <div class="info-card" *ngIf="memberSince">
+        <div class="info-label">Member Since</div>
+        <div class="info-value">{{ memberSince }}</div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-label">User ID</div>
+        <div class="info-value mono-value">{{ user.id }}</div>
+      </div>
+
+    </div>
+
+    <!-- Footer note -->
+    <div class="divider">session active</div>
+    <p style="text-align:center; font-size:0.78rem; color: var(--text-dim);">
+      Your session is secured with JWT authentication.
+    </p>
+
+  </div>
+</div>
