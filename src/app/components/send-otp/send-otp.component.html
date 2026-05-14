@@ -1,0 +1,72 @@
+<div class="page-wrapper">
+  <div class="card fade-in-up">
+
+    <!-- Brand -->
+    <div class="brand">
+      <div class="brand-icon">📱</div>
+      <div class="brand-name">Phone<span>Verify</span></div>
+    </div>
+
+    <!-- Heading -->
+    <h1 class="section-title">Verify your number</h1>
+    <p class="section-subtitle">
+      Enter your phone number in international format and we'll send a 6-digit code to confirm it's you.
+    </p>
+
+    <!-- Error Alert -->
+    <div class="alert alert-error" *ngIf="errorMessage">
+      <span>⚠️</span>
+      <span>{{ errorMessage }}</span>
+    </div>
+
+    <!-- Form -->
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+
+      <div class="form-group">
+        <label for="phoneNumber">Phone Number</label>
+        <div class="input-wrap">
+          <span class="input-icon">🌍</span>
+          <input
+            id="phoneNumber"
+            type="tel"
+            formControlName="phoneNumber"
+            placeholder="+14155552671"
+            autocomplete="tel"
+            [class.error]="phone.invalid && phone.touched"
+          >
+        </div>
+        <div class="field-error" *ngIf="phone.invalid && phone.touched">
+          <span *ngIf="phone.errors?.['required']">Phone number is required</span>
+          <span *ngIf="phone.errors?.['pattern']">
+            Use E.164 format: +[country code][number] (e.g. +14155552671)
+          </span>
+        </div>
+      </div>
+
+      <!-- Format hint -->
+      <div class="alert alert-info" style="margin-bottom: 24px;">
+        <span>ℹ️</span>
+        <span>Include your country code (e.g. <strong>+1</strong> for US, <strong>+44</strong> for UK, <strong>+91</strong> for India)</span>
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="form.invalid || loading"
+      >
+        <span class="spinner" *ngIf="loading"></span>
+        <span>{{ loading ? 'Sending code…' : 'Send Verification Code' }}</span>
+        <span *ngIf="!loading">→</span>
+      </button>
+
+    </form>
+
+    <!-- Footer note -->
+    <div class="divider">secure & private</div>
+    <p style="text-align:center; font-size:0.78rem; color: var(--text-dim); line-height:1.5;">
+      Your number is used only for verification.<br>
+      The code expires in <strong style="color:var(--text-muted)">2 minutes</strong>.
+    </p>
+
+  </div>
+</div>
